@@ -65,4 +65,5 @@ O sistema possui dois tipos de usuários (Cliente e Vendedor) e implementa funci
 ## 📊 Diagrama do Banco de Dados
 
 [cite_start][cite: 32]
+
 (Tire um print da estrutura do seu banco no phpMyAdmin ou do seu diagrama ER e insira a imagem aqui)
