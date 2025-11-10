@@ -1,12 +1,10 @@
 <?php
-// 1. Conexão e Header
 require '../config/conexao.php';
 include '../includes/header.php';
 
-// 2. Autenticação do Vendedor
 include 'auth_vendedor.php';
 
-// 3. Lógica de Listagem (Read)
+
 $mensagem = '';
 if (isset($_GET['status']) && $_GET['status'] == 'sucesso') {
     $mensagem = '<div class="alert alert-success">Produto salvo com sucesso!</div>';
@@ -22,7 +20,7 @@ try {
 
 } catch (PDOException $e) {
     echo "Erro ao listar produtos: " . $e->getMessage();
-    $produtos = []; // Garante que $produtos seja um array
+    $produtos = [];
 }
 ?>
 
@@ -31,7 +29,7 @@ try {
     <a href="produto_criar.php" class="btn btn-primary">Adicionar Novo Produto</a>
 </div>
 
-<?php echo $mensagem; // Exibe mensagem de sucesso se houver ?>
+<?php echo $mensagem;  ?>
 
 <table class="table table-striped table-bordered">
     <thead class="table-dark">
@@ -72,6 +70,5 @@ try {
 
 
 <?php
-// 4. Footer
 include '../includes/footer.php';
 ?>

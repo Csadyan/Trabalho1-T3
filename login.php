@@ -1,23 +1,19 @@
 <?php
-// [CORREÇÃO] Inicia a sessão ANTES de qualquer lógica
 session_start(); 
 
 require 'config/conexao.php';
 $erro = '';
 $mensagem_sucesso = '';
 
-// Se o usuário já estiver logado, redireciona
 if (isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit;
 }
 
-// Verifica se o usuário acabou de se registrar
 if (isset($_GET['status']) && $_GET['status'] == 'registrado') {
     $mensagem_sucesso = "Cadastro realizado com sucesso! Faça seu login.";
 }
 
-// Verifica se o formulário foi enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     if (empty($_POST['email']) || empty($_POST['senha'])) {
@@ -27,20 +23,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $senha = $_POST['senha'];
 
         try {
-            // Busca o usuário pelo e-mail
             $sql = "SELECT * FROM usuarios WHERE email = ?";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$email]);
             $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Verifica se o usuário existe e se a senha está correta
             if ($usuario && password_verify($senha, $usuario['senha'])) {
-                // Autenticação bem-sucedida: Agora a sessão será salva!
                 $_SESSION['user_id'] = $usuario['id'];
                 $_SESSION['user_nome'] = $usuario['nome'];
                 $_SESSION['user_type'] = $usuario['tipo'];
                 
-                // Redireciona para a página principal
                 header("Location: index.php");
                 exit;
             } else {
@@ -53,8 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// O header.php (que também tem session_start) será incluído
-// mas como já iniciamos, ele não causará problemas.
 include 'includes/header.php';
 ?>
 

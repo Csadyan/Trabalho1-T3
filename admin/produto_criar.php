@@ -1,16 +1,12 @@
 <?php
-// 1. Conexão e Header
 require '../config/conexao.php';
 include '../includes/header.php';
 
-// 2. Autenticação do Vendedor
 include 'auth_vendedor.php';
 
 $erro = '';
 
-// 3. Lógica de Criação (Create)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Validação de back-end [cite: 24, 28]
     if (empty($_POST['nome']) || empty($_POST['preco'])) {
         $erro = "Nome e Preço são campos obrigatórios.";
     } else {
@@ -19,12 +15,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $preco = $_POST['preco'];
 
         try {
-            // Segurança: Prepared statements contra SQL Injection [cite: 27]
             $sql = "INSERT INTO produtos (nome, descricao, preco) VALUES (?, ?, ?)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$nome, $descricao, $preco]);
             
-            // Redireciona para a listagem com msg de sucesso
             header("Location: produto_listar.php?status=sucesso");
             exit;
 
@@ -61,6 +55,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </form>
 
 <?php
-// 4. Footer
 include '../includes/footer.php';
 ?>

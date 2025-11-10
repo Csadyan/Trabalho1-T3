@@ -1,18 +1,15 @@
 <?php
-// 1. Conexão e Header
 require 'config/conexao.php';
 include 'includes/header.php';
 
-// Proteção: Somente clientes podem ver o carrinho
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] != 'cliente') {
     header("Location: login.php?erro=Faça login como cliente.");
     exit;
 }
 
 $id_usuario = $_SESSION['user_id'];
-$mensagem = ''; // Mensagem de sucesso foi removida, pois agora vamos direto ao PDF
+$mensagem = '';
 
-// 2. Lógica de Listagem (Read)
 try {
     $sql = "SELECT 
                 p.id, 

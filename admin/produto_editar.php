@@ -1,22 +1,17 @@
 <?php
-// 1. Conexão e Header
 require '../config/conexao.php';
 include '../includes/header.php';
 
-// 2. Autenticação do Vendedor
 include 'auth_vendedor.php';
 
 $erro = '';
-$id = $_GET['id'] ?? null; // Pega o ID da URL
+$id = $_GET['id'] ?? null;
 
 if (!$id) {
     header("Location: produto_listar.php");
     exit;
 }
 
-// 3. Lógica de Edição (Update)
-
-// Se o formulário for enviado (POST)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     if (empty($_POST['nome']) || empty($_POST['preco'])) {
@@ -27,12 +22,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $preco = $_POST['preco'];
 
         try {
-            // Segurança: Prepared statements contra SQL Injection [cite: 27]
             $sql = "UPDATE produtos SET nome = ?, descricao = ?, preco = ? WHERE id = ?";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$nome, $descricao, $preco, $id]);
             
-            // Redireciona para a listagem com msg de sucesso
             header("Location: produto_listar.php?status=sucesso");
             exit;
 
@@ -42,7 +35,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Se não for POST, busca os dados atuais (GET)
 try {
     $sql = "SELECT * FROM produtos WHERE id = ?";
     $stmt = $pdo->prepare($sql);
@@ -50,7 +42,6 @@ try {
     $produto = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$produto) {
-        // Se o produto não for encontrado
         header("Location: produto_listar.php");
         exit;
     }
@@ -88,6 +79,5 @@ try {
 </form>
 
 <?php
-// 4. Footer
 include '../includes/footer.php';
 ?>

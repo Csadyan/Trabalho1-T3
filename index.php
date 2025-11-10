@@ -1,9 +1,7 @@
 <?php
-// 1. Conexão e Header
 require 'config/conexao.php';
 include 'includes/header.php';
 
-// 2. Lógica de Listagem (Read)
 try {
     $sql = "SELECT * FROM produtos ORDER BY nome ASC";
     $stmt = $pdo->query($sql);
@@ -53,6 +51,6 @@ try {
 </div>
 
 <?php
-// 4. Footer
+
 include 'includes/footer.php';
 ?>

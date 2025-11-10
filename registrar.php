@@ -3,10 +3,8 @@ require 'config/conexao.php';
 $mensagem = '';
 $erro = '';
 
-// Verifica se o formulário foi enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    // Validação de back-end
     if (empty($_POST['nome']) || empty($_POST['email']) || empty($_POST['senha']) || empty($_POST['tipo'])) {
         $erro = "Todos os campos são obrigatórios.";
     } elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
@@ -14,22 +12,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $nome = $_POST['nome'];
         $email = $_POST['email'];
-        // Criptografia da senha
         $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
         $tipo = $_POST['tipo'];
 
         try {
-            // Proteção contra SQL Injection com prepared statements
             $sql = "INSERT INTO usuarios (nome, email, senha, tipo) VALUES (?, ?, ?, ?)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$nome, $email, $senha, $tipo]);
             
-            // [MUDANÇA 3] Redireciona para o login após sucesso
             header("Location: login.php?status=registrado");
             exit;
 
         } catch (PDOException $e) {
-            // Verifica se é erro de e-mail duplicado
             if ($e->errorInfo[1] == 1062) {
                 $erro = "Este e-mail já está cadastrado.";
             } else {
@@ -39,8 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Inclui o cabeçalho
-// O $BASE_PATH é definido no header, então não precisamos dele aqui.
 include 'includes/header.php';
 ?>
 
@@ -82,6 +74,5 @@ include 'includes/header.php';
 </div>
 
 <?php
-// Inclui o rodapé
 include 'includes/footer.php';
 ?>
